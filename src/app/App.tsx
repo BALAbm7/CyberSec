@@ -8,6 +8,8 @@ import ModulePage from '../pages/ModulePage'
 import { NAV } from '../data/nav'
 const ArchitecturePage = lazy(() => import('../pages/ArchitecturePage'))
 const CyberRangePage = lazy(() => import('../pages/CyberRangePage'))
+const BlueTeamPage = lazy(() => import('../pages/BlueTeamPage'))
+const IncidentResponsePage = lazy(() => import('../pages/IncidentResponsePage'))
 const RedTeamPage = lazy(() => import('../pages/RedTeamPage'))
 export default function App() {
   const [open, setOpen] = useState(false); const { pathname } = useLocation()
@@ -23,7 +25,9 @@ export default function App() {
             <Route path="/architecture" element={<Suspense fallback={<p>Loading diagram…</p>}><ArchitecturePage /></Suspense>} />
             <Route path="/cyber-range" element={<Suspense fallback={<p>Loading…</p>}><CyberRangePage /></Suspense>} />
             <Route path="/red-team" element={<Suspense fallback={<p>Loading…</p>}><RedTeamPage /></Suspense>} />
-            {NAV.filter(n => !['/', '/architecture', '/cyber-range', '/red-team'].includes(n.path)).map(n => <Route key={n.path} path={n.path} element={<ModulePage />} />)}
+            <Route path="/blue-team" element={<Suspense fallback={<p>Loading…</p>}><BlueTeamPage /></Suspense>} />
+            <Route path="/incident-response" element={<Suspense fallback={<p>Loading…</p>}><IncidentResponsePage /></Suspense>} />
+            {NAV.filter(n => !['/', '/architecture', '/cyber-range', '/red-team', '/blue-team', '/incident-response'].includes(n.path)).map(n => <Route key={n.path} path={n.path} element={<ModulePage />} />)}
             <Route path="*" element={<ModulePage />} />
           </Routes>
         </main>
