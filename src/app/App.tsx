@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState, type ComponentType, type LazyExoticComponent } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar } from '../components/layout/Sidebar'
 import { Header } from '../components/layout/Header'
@@ -6,11 +6,10 @@ import { Character } from '../components/character/Character'
 import HomePage from '../pages/HomePage'
 import ModulePage from '../pages/ModulePage'
 import { NAV } from '../data/nav'
-const ArchitecturePage = lazy(() => import('../pages/ArchitecturePage'))
-const CyberRangePage = lazy(() => import('../pages/CyberRangePage'))
-const BlueTeamPage = lazy(() => import('../pages/BlueTeamPage'))
-const IncidentResponsePage = lazy(() => import('../pages/IncidentResponsePage'))
-const RedTeamPage = lazy(() => import('../pages/RedTeamPage'))
+const pages: Record<string, LazyExoticComponent<ComponentType>> = {
+  '/architecture': lazy(() => import('../pages/ArchitecturePage')), '/cyber-range': lazy(() => import('../pages/CyberRangePage')), '/red-team': lazy(() => import('../pages/RedTeamPage')),
+  '/blue-team': lazy(() => import('../pages/BlueTeamPage')), '/incident-response': lazy(() => import('../pages/IncidentResponsePage')), '/email': lazy(() => import('../pages/EmailSecurityPage')),
+  '/endpoint': lazy(() => import('../pages/EndpointSecurityPage')), '/identity': lazy(() => import('../pages/IdentitySecurityPage')), '/servers': lazy(() => import('../pages/ServerSecurityPage')) }
 export default function App() {
   const [open, setOpen] = useState(false); const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -22,12 +21,8 @@ export default function App() {
         <main className="p-4 md:p-8 pb-40">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/architecture" element={<Suspense fallback={<p>Loading diagram…</p>}><ArchitecturePage /></Suspense>} />
-            <Route path="/cyber-range" element={<Suspense fallback={<p>Loading…</p>}><CyberRangePage /></Suspense>} />
-            <Route path="/red-team" element={<Suspense fallback={<p>Loading…</p>}><RedTeamPage /></Suspense>} />
-            <Route path="/blue-team" element={<Suspense fallback={<p>Loading…</p>}><BlueTeamPage /></Suspense>} />
-            <Route path="/incident-response" element={<Suspense fallback={<p>Loading…</p>}><IncidentResponsePage /></Suspense>} />
-            {NAV.filter(n => !['/', '/architecture', '/cyber-range', '/red-team', '/blue-team', '/incident-response'].includes(n.path)).map(n => <Route key={n.path} path={n.path} element={<ModulePage />} />)}
+            {Object.entries(pages).map(([p, C]) => <Route key={p} path={p} element={<Suspense fallback={<p>Loading…</p>}><C /></Suspense>} />)}
+            {NAV.filter(n => n.path !== '/' && !(n.path in pages)).map(n => <Route key={n.path} path={n.path} element={<ModulePage />} />)}
             <Route path="*" element={<ModulePage />} />
           </Routes>
         </main>
