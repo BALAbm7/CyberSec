@@ -7,6 +7,8 @@ import HomePage from '../pages/HomePage'
 import ModulePage from '../pages/ModulePage'
 import { NAV } from '../data/nav'
 const ArchitecturePage = lazy(() => import('../pages/ArchitecturePage'))
+const CyberRangePage = lazy(() => import('../pages/CyberRangePage'))
+const RedTeamPage = lazy(() => import('../pages/RedTeamPage'))
 export default function App() {
   const [open, setOpen] = useState(false); const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -19,7 +21,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/architecture" element={<Suspense fallback={<p>Loading diagram…</p>}><ArchitecturePage /></Suspense>} />
-            {NAV.filter(n => n.path !== '/' && n.path !== '/architecture').map(n => <Route key={n.path} path={n.path} element={<ModulePage />} />)}
+            <Route path="/cyber-range" element={<Suspense fallback={<p>Loading…</p>}><CyberRangePage /></Suspense>} />
+            <Route path="/red-team" element={<Suspense fallback={<p>Loading…</p>}><RedTeamPage /></Suspense>} />
+            {NAV.filter(n => !['/', '/architecture', '/cyber-range', '/red-team'].includes(n.path)).map(n => <Route key={n.path} path={n.path} element={<ModulePage />} />)}
             <Route path="*" element={<ModulePage />} />
           </Routes>
         </main>

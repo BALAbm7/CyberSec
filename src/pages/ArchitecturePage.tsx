@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
 import { ReactFlow, Background, Controls, MiniMap, MarkerType, type Edge } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { ASSETS, LINKS, ATTACK_PATH, ATTACK_STEPS, ENV_LABEL, ZONE_INFO, type Asset, type Env, type EdgeKind, type Zone } from '../data/architecture'
+import { ASSETS, LINKS, ATTACK_PATH, ATTACK_STEPS, ENV_LABEL, ZONE_INFO, type Env, type EdgeKind, type Zone } from '../data/architecture'
 import { ArchNodeView, ZoneView, type ArchNode, type ZoneNode } from '../features/architecture/ArchNodes'
 import { AssetPanel } from '../features/architecture/AssetPanel'
+import { NW, NH, byId, handles } from '../features/architecture/helpers'
 import { useCharacter } from '../components/character/CharacterContext'
 type Mode = 'overview' | 'attack' | 'telemetry'
 const ENVS = Object.keys(ENV_LABEL) as Env[]
@@ -13,15 +14,8 @@ const STYLE: Record<EdgeKind, { color: string; dash?: string; name: string }> = 
   admin: { color: '#FFB547', dash: '6 4', name: 'Administrative access' }, suspicious: { color: '#FF4D5A', name: 'Suspicious (simulated)' },
   blocked: { color: '#FF4D5A', dash: '2 5', name: 'Blocked' }, telemetry: { color: '#39FF88', dash: '8 4', name: 'Telemetry to SIEM' } }
 const nodeTypes = { arch: ArchNodeView, zone: ZoneView }
-const NW = 170, NH = 64
-const byId = (id: string) => ASSETS.find(a => a.id === id) as Asset
 const TELE_NODES = new Set(LINKS.filter(l => l.kind === 'telemetry').flatMap(l => [l.source, l.target]))
 const ATTACK_NODES = new Set(ATTACK_PATH.flatMap(id => id.split('>')))
-function handles(a: Asset, b: Asset): [string, string] {
-  const dx = b.x - a.x, dy = b.y - a.y
-  if (Math.abs(dx) >= Math.abs(dy) * 0.7) return dx >= 0 ? ['r', 'l'] : ['l', 'r']
-  return dy >= 0 ? ['b', 't'] : ['t', 'b']
-}
 export default function ArchitecturePage() {
   const { act } = useCharacter()
   const [sel, setSel] = useState<string | null>(null)
@@ -92,7 +86,7 @@ export default function ArchitecturePage() {
           <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} colorMode="dark" fitView fitViewOptions={{ padding: 0.1 }} minZoom={0.2} maxZoom={1.8}
             nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: true }}
             onNodeClick={(_, n) => { if (n.type === 'arch') pick(n.id) }} onEdgeClick={(_, e) => { setSelEdge(e.id); setSel(null) }} onPaneClick={() => { setSel(null); setSelEdge(null) }}>
-            <Background color="#123C2B" gap={32} /><Controls showInteractive={false} /><MiniMap pannable zoomable className="!hidden md:!block" nodeColor="#39FF88" maskColor="#07110Dcc" />
+            <Background color="#123C2B" gap={32} /><Controls showInteractive={false} /><MiniMap pannable zoomable className="!hidden md:!block" bgColor="#0B1712" nodeColor={n => (n.type === 'zone' ? 'transparent' : '#39FF88')} maskColor="rgba(7,17,13,0.55)" />
           </ReactFlow>
         </div>
         <aside className="glass p-4 overflow-y-auto max-h-[70vh] min-h-[200px]" aria-live="polite">

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useCharacter, type CharState } from './CharacterContext'
@@ -28,13 +29,15 @@ export function CharacterSprite({ state, size = 160 }: { state: CharState; size?
 }
 export function Character() {
   const { state, line, hidden, setHidden, act } = useCharacter()
+  const [show, setShow] = useState(true)
+  useEffect(() => { setShow(true); const t = window.setTimeout(() => setShow(false), 5000); return () => window.clearTimeout(t) }, [line])
   if (hidden) return <button onClick={() => { setHidden(false); act('success', 'Welcome back!') }} className="fixed bottom-4 right-4 z-30 glass px-3 py-2 text-sm text-accent">Show guide</button>
   return (
     <div className="fixed bottom-2 right-3 z-30 hidden sm:flex items-end gap-2 pointer-events-none" aria-live="polite">
-      <motion.div key={line} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="glass max-w-[220px] p-3 text-sm pointer-events-auto relative mb-24">
-        <button aria-label="Hide guide" onClick={() => setHidden(true)} className="absolute -top-2 -right-2 bg-bg2 rounded-full p-1 border border-deep"><X size={12} /></button>
-        {line}
-      </motion.div>
-      <CharacterSprite state={state} size={90} />
+      <motion.div animate={{ opacity: show ? 1 : 0 }} className="glass max-w-[220px] p-3 text-sm mb-24 pointer-events-none">{line}</motion.div>
+      <div className="relative pointer-events-auto">
+        <button aria-label="Hide guide" onClick={() => setHidden(true)} className="absolute -top-1 right-0 bg-bg2 rounded-full p-1 border border-deep z-10"><X size={12} /></button>
+        <CharacterSprite state={state} size={90} />
+      </div>
     </div>)
 }
