@@ -9,7 +9,9 @@ import { NAV } from '../data/nav'
 const pages: Record<string, LazyExoticComponent<ComponentType>> = {
   '/architecture': lazy(() => import('../pages/ArchitecturePage')), '/cyber-range': lazy(() => import('../pages/CyberRangePage')), '/red-team': lazy(() => import('../pages/RedTeamPage')),
   '/blue-team': lazy(() => import('../pages/BlueTeamPage')), '/incident-response': lazy(() => import('../pages/IncidentResponsePage')), '/email': lazy(() => import('../pages/EmailSecurityPage')),
-  '/endpoint': lazy(() => import('../pages/EndpointSecurityPage')), '/identity': lazy(() => import('../pages/IdentitySecurityPage')), '/servers': lazy(() => import('../pages/ServerSecurityPage')) }
+  '/endpoint': lazy(() => import('../pages/EndpointSecurityPage')), '/identity': lazy(() => import('../pages/IdentitySecurityPage')), '/servers': lazy(() => import('../pages/ServerSecurityPage')),
+  '/network': lazy(() => import('../pages/NetworkSecurityPage')), '/cloud': lazy(() => import('../pages/CloudSecurityPage')), '/ot': lazy(() => import('../pages/OTSecurityPage')), '/threat-hunting': lazy(() => import('../pages/ThreatHuntingPage')),
+  '/mitre': lazy(() => import('../pages/MitreExplorerPage')), '/controls': lazy(() => import('../pages/SecurityControlsPage')), '/attack-library': lazy(() => import('../pages/AttackLibraryPage')), '/glossary': lazy(() => import('../pages/GlossaryPage')), '/about': lazy(() => import('../pages/AboutPage')) }
 export default function App() {
   const [open, setOpen] = useState(false); const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])

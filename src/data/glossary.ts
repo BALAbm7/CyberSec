@@ -1,0 +1,40 @@
+export const GLOSSARY: { term: string; def: string }[] = [
+  { term: 'SIEM', def: 'Security information and event management: collects, normalizes, and correlates logs to produce alerts.' },
+  { term: 'EDR', def: 'Endpoint detection and response: agent-based monitoring, detection, and response on hosts.' },
+  { term: 'NDR', def: 'Network detection and response: analyzes network traffic for threats and supports investigation.' },
+  { term: 'XDR', def: 'Extended detection and response: correlates telemetry across endpoint, identity, email, and cloud (definitions vary by vendor).' },
+  { term: 'SOC', def: 'Security operations center: the team and tools that monitor and respond to threats.' },
+  { term: 'IOC', def: 'Indicator of compromise: an artifact such as an IP, hash, or domain linked to malicious activity.' },
+  { term: 'IOA', def: 'Indicator of attack: behavior that suggests an attack in progress, regardless of specific artifacts.' },
+  { term: 'TTP', def: 'Tactics, techniques, and procedures: how an adversary operates.' },
+  { term: 'MITRE ATT&CK', def: 'A knowledge base of adversary tactics and techniques used to describe and map behavior.' },
+  { term: 'Active Directory', def: 'Microsoft directory service for authentication and policy in Windows domains.' },
+  { term: 'Kerberos', def: 'Ticket-based authentication protocol used in Active Directory.' },
+  { term: 'LDAP', def: 'Protocol for querying and modifying directory services.' },
+  { term: 'DNS', def: 'System that translates names to IP addresses; rich source of telemetry.' },
+  { term: 'SPF', def: 'Email standard listing servers allowed to send for a domain.' },
+  { term: 'DKIM', def: 'Email standard that signs messages so receivers can verify the signing domain.' },
+  { term: 'DMARC', def: 'Policy that ties SPF/DKIM to the visible From domain and sets handling for failures.' },
+  { term: 'KQL', def: 'Kusto Query Language used in Microsoft Sentinel and Defender hunting.' },
+  { term: 'AQL', def: 'Ariel Query Language used in IBM QRadar.' },
+  { term: 'IAM', def: 'Identity and access management: controlling who can access what.' },
+  { term: 'CSPM', def: 'Cloud security posture management: finds and tracks cloud misconfigurations.' },
+  { term: 'CWPP', def: 'Cloud workload protection platform: protects running cloud workloads.' },
+  { term: 'Zero Trust', def: 'Security model that verifies identity, device, and context for every request instead of trusting network location.' },
+  { term: 'Lateral Movement', def: 'Moving from one compromised system to others inside a network.' },
+  { term: 'Persistence', def: 'Techniques to keep access across reboots or credential changes.' },
+  { term: 'Privilege Escalation', def: 'Gaining higher permissions than initially held.' },
+  { term: 'Command and Control', def: 'Communication between compromised systems and attacker infrastructure.' },
+  { term: 'Incident Response', def: 'The process of preparing for, detecting, containing, eradicating, and recovering from incidents.' },
+  { term: 'Purdue Model', def: 'A reference model that layers industrial networks from enterprise IT down to physical process devices.' }]
+export interface PathModule { title: string; path: string; exercise: string }
+export interface LearnPath { id: string; name: string; prereq: string; modules: PathModule[] }
+const m = (title: string, path: string, exercise: string): PathModule => ({ title, path, exercise })
+export const PATHS: LearnPath[] = [
+  { id: 'soc', name: 'SOC Analyst', prereq: 'Networking and OS basics', modules: [m('Enterprise Architecture', '/architecture', 'Trace the telemetry path and name three log sources.'), m('Blue Team console', '/blue-team', 'Complete all six cases.'), m('Email Security', '/email', 'Explain why the passing SPF/DKIM/DMARC email is malicious.'), m('Endpoint Security', '/endpoint', 'Contain the Windows host and explain the trade-off.'), m('Incident Response', '/incident-response', 'Finish the incident and review your score.')] },
+  { id: 'blue', name: 'Blue-Team Analyst', prereq: 'SOC Analyst path basics', modules: [m('Servers (Windows & Linux)', '/servers', 'Interpret the guided Windows event sequence.'), m('Identity & AD', '/identity', 'Break the domain-compromise path with controls.'), m('Security Controls', '/controls', 'Compare before and after for all scenarios.'), m('Incident Response', '/incident-response', 'Choose a containment strategy and justify it.')] },
+  { id: 'hunter', name: 'Threat Hunter', prereq: 'Log analysis, SOC basics', modules: [m('Threat Hunting', '/threat-hunting', 'Pivot from one IP across three datasets.'), m('MITRE ATT&CK Explorer', '/mitre', 'Map a technique to Aegis assets.'), m('Network Security', '/network', 'Identify the beaconing flow.'), m('Attack Library', '/attack-library', 'Write one detection idea for DNS tunneling.')] },
+  { id: 'cloud', name: 'Cloud Security Engineer', prereq: 'IAM and networking basics', modules: [m('Cloud Security', '/cloud', 'Work through all five incidents.'), m('Security Controls', '/controls', 'Review cloud IAM and secrets controls.'), m('Identity & AD', '/identity', 'Explain hybrid identity risks.'), m('Threat Hunting', '/threat-hunting', 'Hunt in cloud audit events.')] },
+  { id: 'seceng', name: 'Security Engineer', prereq: 'Systems and networking', modules: [m('Enterprise Architecture', '/architecture', 'Apply improvements and list what changed.'), m('Cyber Range', '/cyber-range', 'Find the minimum controls that stop each scenario.'), m('Security Controls', '/controls', 'Document validation steps for three controls.'), m('Network Security', '/network', 'Design rules that block the suspicious flows.')] },
+  { id: 'ot', name: 'OT Security Analyst', prereq: 'Networking, SOC basics', modules: [m('OT / ICS Security', '/ot', 'Explain the Purdue Model and the OT DMZ.'), m('Enterprise Architecture', '/architecture', 'Find every IT-to-OT path.'), m('Cyber Range', '/cyber-range?scenario=it-ot', 'Run the IT-to-OT scenario with and without the allowlist.'), m('Incident Response', '/incident-response', 'Note what changes when operations are involved.')] },
+  { id: 'red', name: 'Red-Team Fundamentals', prereq: 'Networking, OS basics', modules: [m('Red Team', '/red-team', 'Read the tactics A-K cards.'), m('Attack Library', '/attack-library', 'Pick three entries and list their detections.'), m('MITRE ATT&CK Explorer', '/mitre', 'Trace one scenario across techniques.'), m('Cyber Range', '/cyber-range', 'Explain where a defender could stop each chain.')] }]
